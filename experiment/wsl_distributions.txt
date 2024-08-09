@@ -1,0 +1,3 @@
+﻿Ubuntu-24.04
+docker-desktop-data
+docker-desktop
