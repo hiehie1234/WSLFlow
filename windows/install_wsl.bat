@@ -1,5 +1,15 @@
 @echo off
 :: 以管理员身份执行
+echo Administrative permissions required. Detecting permissions...
+
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    echo Success: Administrative permissions confirmed.
+) else (
+    echo Failure: Current permissions inadequate.
+    goto end
+)
+
 echo Starting WSL2 installation...
 
 :: 启用 WSL 和虚拟机平台
@@ -11,6 +21,10 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 echo Setting WSL2 as the default version...
 wsl --set-default-version 2
 
+:: 更新 WSL
+echo Updating WSL...
+wsl --update
+
 :: 安装 Ubuntu 发行版
 echo Installing Ubuntu distribution. This may take a while...
 :: 提示用户首次启动 Ubuntu 控制台时，需要手动输入 exit 并按回车退出，以确保更新正常
@@ -19,10 +33,6 @@ wsl --install -d Ubuntu
 
 :: 写入标记到文件，表示用户上一步输入exit退出,而不是直接关闭窗口
 :: 输入退出可以继续下面步骤，直接关闭窗口会导致下面步骤无法执行
-
-:: 更新 WSL
-echo Updating WSL...
-wsl --update
 
 :: 将分布版设置为默认值
 wsl --set-default Ubuntu

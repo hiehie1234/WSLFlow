@@ -1,12 +1,30 @@
 @echo off
 :: 以管理员身份执行
+echo Administrative permissions required. Detecting permissions...
+
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    echo Success: Administrative permissions confirmed.
+) else (
+    echo Failure: Current permissions inadequate.
+    goto end
+)
+
 echo Uninstalling WSL2 and all related components...
 
+:: 如果默认分布版不是Ubuntu，则将分布版设置为Ubuntu
+:: 将分布版设置为默认值
+wsl --set-default Ubuntu
+
+set "ENV_NAME=FlexTuner"
+
+:: 获取 WSL 用户名
+for /f "tokens=* USEBACKQ" %%F in (`wsl whoami`) do set "wsl_username=%%F"
+
 :: 在 WSL 中执行脚本
-wsl bash -ic "cd /home/%wsl_username%/%ENV_NAME% && ./install.sh"
+wsl bash -ic "cd /home/%wsl_username%/%ENV_NAME% && ./uninstall.sh"
 if %errorlevel% neq 0 (
     echo 脚本执行失败。
-    exit /b %errorlevel%
 )
 
 :: 停止所有正在运行的 WSL 实例
@@ -28,12 +46,15 @@ echo Proceeding with uninstallation...
 @REM for /f "tokens=*" %%i in ('wsl --list --quiet') do wsl --unregister %%i
 wsl --unregister Ubuntu
 
+:: 删除 WSL 相关文件夹
+:: 使用 for 循环处理通配符路径
+for /d %%i in ("%USERPROFILE%\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu_*") do (
+    rmdir /s /q "%%i"
+)
+
 :: 禁用 WSL 和虚拟机平台
 dism.exe /online /disable-feature /featurename:Microsoft-Windows-Subsystem-Linux
 dism.exe /online /disable-feature /featurename:VirtualMachinePlatform
-
-:: 删除 WSL 相关文件夹
-rmdir /s /q %USERPROFILE%\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu*
 
 echo WSL2 and all related components have been uninstalled.
 pause
