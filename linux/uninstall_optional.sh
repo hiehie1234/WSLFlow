@@ -1,6 +1,17 @@
 #!/bin/bash
 
-# 卸载可选依赖项，如 deepspeed
+# 命名环境名称为ENV_NAME=FlexTuner
+ENV_NAME=FlexTuner
+
+# 初始化conda环境配置
+eval "$(conda shell.bash hook)"
+
+# 确保退出base环境
+conda deactivate
+
+# 激活conda环境
+conda activate $ENV_NAME
+echo "环境 $ENV_NAME 已成功创建并激活。"
 
 # 检查并卸载 deepspeed
 if pip show deepspeed &> /dev/null; then
