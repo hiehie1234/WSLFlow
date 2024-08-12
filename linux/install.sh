@@ -10,6 +10,14 @@ else
     echo "Conda 未安装，开始安装 Miniconda。"
     # 安装conda工具,调用conda_quick_install.sh脚本
     ./conda_quick_install.sh
+
+    source ~/.bashrc
+    
+    # 再次判断防止conda未安装成功
+    if ! command -v conda &> /dev/null; then
+        echo "Conda 安装失败，请检查安装脚本。"
+        exit 1
+    fi
 fi
 
 # 新建conda环境,调用env_init.sh脚本
