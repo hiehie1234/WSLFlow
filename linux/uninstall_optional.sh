@@ -16,7 +16,7 @@ echo "环境 $ENV_NAME 已成功创建并激活。"
 # 检查并卸载 deepspeed
 if pip show deepspeed &> /dev/null; then
     echo "卸载 deepspeed..."
-    pip uninstall -y deepspeed
+    pip uninstall deepspeed --timeout 90 -y
 else
     echo "deepspeed 未安装。"
 fi
@@ -24,7 +24,7 @@ fi
 # 检查并卸载 bitsandbytes
 if pip show bitsandbytes &> /dev/null; then
     echo "卸载 bitsandbytes..."
-    pip uninstall -y bitsandbytes
+    pip uninstall bitsandbytes --timeout 90 -y
 else
     echo "bitsandbytes 未安装。"
 fi
