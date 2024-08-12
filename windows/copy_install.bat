@@ -25,6 +25,13 @@ if %errorlevel% neq 0 (
     echo 文件复制失败。
     exit /b %errorlevel%
 )
+
+:: Install dos2unix if not already installed
+wsl sudo apt-get update
+wsl sudo apt-get install -y dos2unix
+:: Convert all .sh files to Unix line endings
+wsl bash -c "find %home%/%ENV_NAME% -type f -name '*.sh' -exec dos2unix {} +"
+
 :: 在 WSL 中为所有 .sh 文件添加执行权限
 wsl bash -c "chmod +x %home%/%ENV_NAME%/*.sh"
 
