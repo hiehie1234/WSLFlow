@@ -12,7 +12,7 @@ conda activate $ENV_NAME
 echo "环境 $ENV_NAME 已激活。"
 
 # install source code from github
-git clone --depth 1 https://github.com/hiyouga/LLaMA-Factory.git  "$HOME/$ENV_NAME/src"
+git clone --depth 1 https://github.com/hiyouga/LLaMA-Factory.git "$HOME/$ENV_NAME/src" --config http.lowSpeedLimit=0 --config http.lowSpeedTime=99999
 if [ $? -ne 0 ]; then
   echo "Error: Failed to clone repository."
 fi
