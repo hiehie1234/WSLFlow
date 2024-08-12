@@ -3,9 +3,10 @@
 # 加载用户的环境变量
 source ~/.bashrc
 
-# 卸载其它可选依赖如deepspeed
-echo "卸载可选依赖..."
-./uninstall_optional.sh
+# # 卸载其它可选依赖如deepspeed
+# echo "卸载可选依赖..."
+# ./uninstall_optional.sh
+
 # 卸载CUDA和CUDNN
 ./uninstall_cuda.sh
 # 卸载lmf源码
