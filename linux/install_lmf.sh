@@ -15,11 +15,10 @@ echo "环境 $ENV_NAME 已激活。"
 git clone --depth 1 https://github.com/hiyouga/LLaMA-Factory.git  "$HOME/$ENV_NAME/src"
 if [ $? -ne 0 ]; then
   echo "Error: Failed to clone repository."
-  exit 1
 fi
 
 cd $HOME/$ENV_NAME/src
-pip install -e ".[metrics]"
+pip install -e ".[metrics]" --timeout 600
 
 echo "环境 $ENV_NAME 关闭。"
 
