@@ -21,6 +21,14 @@ else
     echo "deepspeed 未安装。"
 fi
 
+# 检查并卸载 bitsandbytes
+if pip show bitsandbytes &> /dev/null; then
+    echo "卸载 bitsandbytes..."
+    pip uninstall -y bitsandbytes
+else
+    echo "bitsandbytes 未安装。"
+fi
+
 # 你可以在这里添加更多可选依赖项的卸载逻辑
 # 例如：
 # if pip show some_optional_package &> /dev/null; then
