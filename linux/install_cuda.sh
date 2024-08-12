@@ -38,7 +38,7 @@ sudo apt-get update
 sudo apt-get -y install cuda-12-1
 
 # 删除下载的 CUDA 包和 MD5 校验值文件
-# rm $CUDA_DEB $MD5SUM_FILE
+rm $CUDA_DEB $MD5SUM_FILE
 
 # 添加环境变量到 .bashrc
 cuda_path='export PATH=/usr/local/cuda/bin:$PATH'
