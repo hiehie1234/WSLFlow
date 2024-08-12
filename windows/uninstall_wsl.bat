@@ -18,11 +18,8 @@ wsl --set-default Ubuntu
 
 set "ENV_NAME=FlexTuner"
 
-:: 获取 WSL 用户名
-for /f "tokens=* USEBACKQ" %%F in (`wsl whoami`) do set "wsl_username=%%F"
-
 :: 在 WSL 中执行脚本
-wsl bash -ic "cd /home/%wsl_username%/%ENV_NAME% && ./uninstall.sh"
+wsl bash -ic "cd $HOME/%ENV_NAME% && ./uninstall.sh"
 if %errorlevel% neq 0 (
     echo 脚本执行失败。
 )
