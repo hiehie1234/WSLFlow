@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# 命名环境名称为ENV_NAME=FlexTuner
+ENV_NAME=FlexTuner
+
+# 初始化conda环境配置
+eval "$(conda shell.bash hook)"
+# 激活conda环境
+conda activate $ENV_NAME
+echo "环境 $ENV_NAME 已成功创建并激活。"
+conda env list
+
 # Function to check package version using pip
 check_pip_package() {
     package=$1
