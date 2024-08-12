@@ -3,9 +3,6 @@
 # 命名环境名称为ENV_NAME=FlexTuner
 ENV_NAME=FlexTuner
 
-# conda创建python==3.11环境
-conda create -n $ENV_NAME python=3.11 -y
-
 # 初始化conda环境配置
 eval "$(conda shell.bash hook)"
 
