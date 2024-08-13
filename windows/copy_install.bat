@@ -47,4 +47,4 @@ if %errorlevel% neq 0 (
 
 echo 文件已成功复制并执行。
 endlocal
-pause
+@REM pause

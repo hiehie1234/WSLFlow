@@ -54,4 +54,4 @@ dism.exe /online /disable-feature /featurename:Microsoft-Windows-Subsystem-Linux
 dism.exe /online /disable-feature /featurename:VirtualMachinePlatform
 
 echo WSL2 and all related components have been uninstalled.
-pause
+@REM pause
