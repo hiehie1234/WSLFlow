@@ -8,4 +8,4 @@ for /f "tokens=* USEBACKQ" %%F in (`wsl whoami`) do set "wsl_username=%%F"
 :: 启动lmf-cli webui
 wsl -e bash -ic "source ~/.bashrc && conda activate %ENV_NAME% && conda env list && cd $HOME/%ENV_NAME%/src && pwd && llamafactory-cli webui"
 
-pause
+@REM pause
