@@ -47,7 +47,7 @@ echo "DeepSpeed 安装完成！"
 
 # [optional]
 # 安装 bitsandbytes
-pip install bitsandbytes
+# pip install bitsandbytes
 
 # [optional]
 # 安装 flash-attn
