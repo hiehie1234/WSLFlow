@@ -29,7 +29,7 @@ wsl --update
 echo Installing Ubuntu distribution. This may take a while...
 :: 提示用户首次启动 Ubuntu 控制台时，需要手动输入 exit 并按回车退出，以确保更新正常
 :: echo Please exit the Ubuntu console by typing 'exit' to complete the installation.
-wsl --install -d Ubuntu
+wsl --install Ubuntu
 
 echo WSL2 installation and configuration complete.
 
