@@ -1,5 +1,12 @@
 @echo off
 
+:: 将分布版设置为默认值
+wsl --set-default Ubuntu
+if %errorlevel% neq 0 (
+    echo 操作失败。
+    exit /b %errorlevel%
+)
+
 set "ENV_NAME=FlexTuner"
 :: 获取 WSL 用户名
 for /f "tokens=* USEBACKQ" %%F in (`wsl whoami`) do set "wsl_username=%%F"

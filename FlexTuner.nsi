@@ -22,8 +22,7 @@ RequestExecutionLevel admin
 
 ; Build Unicode installer
 ; Unicode True
-!include "MUI2.nsh"
-!insertmacro MUI_LANGUAGE "English"
+
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\${APP_NAME}
@@ -32,17 +31,19 @@ InstallDir $PROGRAMFILES\${APP_NAME}
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\NSIS_${APP_NAME}" "Install_Dir"
 
+!include "MUI2.nsh"
 ;--------------------------------
 ; Pages
-
 Page components
 Page directory
-Page instfiles
-
+; Page instfiles
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_LANGUAGE "English"
 UninstPage uninstConfirm
 UninstPage instfiles
 
 ;--------------------------------
+
 
 ; The stuff to install
 Section "${APP_NAME} (required)"

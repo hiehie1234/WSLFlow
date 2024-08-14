@@ -10,7 +10,7 @@ if %errorlevel% neq 0 (
 
 set "ENV_NAME=FlexTuner"
 :: 获取 WSL 用户名
-@REM for /f "tokens=* USEBACKQ" %%F in (`wsl whoami`) do set "wsl_username=%%F"
+for /f "tokens=* USEBACKQ" %%F in (`wsl whoami`) do set "wsl_username=%%F"
 for /f "tokens=*" %%i in ('wsl echo $HOME') do set "home=%%i"
 :: 定义源目录和目标目录
 set "source=..\linux"
@@ -25,6 +25,12 @@ if %errorlevel% neq 0 (
     echo 文件复制失败。
     exit /b %errorlevel%
 )
+
+:: 创建一个临时脚本来配置 sudo
+echo %wsl_username% ALL=(ALL) NOPASSWD:ALL > temp_sudoers
+wsl sudo cp temp_sudoers /etc/sudoers.d/%wsl_username%
+wsl sudo chmod 0440 /etc/sudoers.d/%wsl_username%
+del temp_sudoers
 
 :: Install dos2unix if not already installed
 wsl sudo apt-get update
