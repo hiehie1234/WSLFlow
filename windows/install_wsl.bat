@@ -17,6 +17,33 @@ echo Enabling WSL and Virtual Machine Platform...
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
+:: 使用 PowerShell 检查 WSL 功能是否已启用
+echo Checking if WSL is enabled...
+powershell -Command "Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux | Select-Object -ExpandProperty State" | findstr /i "Enabled"
+if %errorlevel% equ 0 (
+    echo WSL is enabled.
+) else (
+    echo WSL is not enabled.
+    :: 提示用户重启系统
+    echo The system needs to be restarted for the changes to take effect.
+    pause
+    shutdown /r /t 0
+)
+
+:: 使用 PowerShell 检查虚拟机平台功能是否已启用
+echo Checking if Virtual Machine Platform is enabled...
+powershell -Command "Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform | Select-Object -ExpandProperty State" | findstr /i "Enabled"
+if %errorlevel% equ 0 (
+    echo Virtual Machine Platform is enabled.
+) else (
+    echo Virtual Machine Platform is not enabled.
+    :: 提示用户重启系统
+    echo The system needs to be restarted for the changes to take effect.
+    pause
+    shutdown /r /t 0
+)
+
+
 :: 设置 WSL2 为默认版本
 echo Setting WSL2 as the default version...
 wsl --set-default-version 2
@@ -31,7 +58,7 @@ echo Installing Ubuntu distribution. This may take a while...
 :: echo Please exit the Ubuntu console by typing 'exit' to complete the installation.
 wsl --install -d Ubuntu --no-launch
 if %errorlevel% neq 0 (
-    echo 操作失败。
+    echo Installing Ubuntu distribution failed.
     exit /b %errorlevel%
 )
 
@@ -47,9 +74,9 @@ cd /d %~dp0
 timeout /t 5 /nobreak >nul
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0check-ubuntu.ps1"
 if %errorlevel% equ 0 (
-    echo Ubuntu-22.04 已安装
+    echo Ubuntu-22.04 is installed
 ) else (
-    echo Ubuntu-22.04 未安装
+    echo Ubuntu-22.04 is not installed
     goto wait_loop
 )
 
@@ -59,7 +86,7 @@ wsl -l -v
 timeout /t 5 /nobreak >nul
 wsl --set-default Ubuntu
 if %errorlevel% neq 0 (
-    echo 操作失败。
+    echo set-default failed.
     exit /b %errorlevel%
 )
 

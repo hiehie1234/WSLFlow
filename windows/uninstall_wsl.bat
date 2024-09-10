@@ -21,7 +21,7 @@ set "ENV_NAME=FlexTuner"
 :: 在 WSL 中执行脚本
 wsl bash -ic "cd $HOME/%ENV_NAME% && ./uninstall.sh"
 if %errorlevel% neq 0 (
-    echo 脚本执行失败。
+    echo uninstall Script execution failed.
 )
 
 :: 停止所有正在运行的 WSL 实例

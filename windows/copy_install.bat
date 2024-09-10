@@ -4,7 +4,7 @@ setlocal
 :: 将分布版设置为默认值
 wsl --set-default Ubuntu
 if %errorlevel% neq 0 (
-    echo 操作失败。
+    echo Set default failed.
     exit /b %errorlevel%
 )
 
@@ -22,7 +22,7 @@ wsl mkdir -p "%home%/%ENV_NAME%"
 :: 复制文件到 WSL 用户目录
 xcopy "%source%" "%destination%" /s /e /y
 if %errorlevel% neq 0 (
-    echo 文件复制失败。
+    echo File copy failed.
     exit /b %errorlevel%
 )
 
@@ -47,10 +47,10 @@ wsl bash -c "find %home%/%ENV_NAME% -type f -name '*.sh' -exec chmod +x {} +"
 :: 在 WSL 中执行脚本
 wsl bash -ic "cd %home%/%ENV_NAME% && ./install.sh"
 if %errorlevel% neq 0 (
-    echo 脚本执行失败。
+    echo Installing failed.
     exit /b %errorlevel%
 )
 
-echo 文件已成功复制并执行。
+echo File copied and executed successfully.
 endlocal
 @REM pause
