@@ -3,7 +3,7 @@
 # 检查是否安装了 Conda
 if ! command -v conda &> /dev/null
 then
-    echo "Conda 未安装。"
+    echo "Conda is not installed."
     exit 1
 fi
 
@@ -22,8 +22,9 @@ conda env remove -n "$ENV_NAME"
 
 # 检查卸载是否成功
 if [ $? -eq 0 ]; then
-    echo "环境 $ENV_NAME 已成功卸载。"
+    echo "$ENV_NAME uninstalled successfully."
 else
-    echo "卸载环境 $ENV_NAME 失败。"
+    echo "$ENV_NAME uninstallation failed."
+    exit 1
 fi
 

@@ -50,8 +50,8 @@ for /d %%i in ("%USERPROFILE%\AppData\Local\Packages\CanonicalGroupLimited.Ubunt
 )
 
 :: 禁用 WSL 和虚拟机平台
-dism.exe /online /disable-feature /featurename:Microsoft-Windows-Subsystem-Linux
-dism.exe /online /disable-feature /featurename:VirtualMachinePlatform
+@REM dism.exe /online /disable-feature /featurename:Microsoft-Windows-Subsystem-Linux
+@REM dism.exe /online /disable-feature /featurename:VirtualMachinePlatform
 
 echo WSL2 and all related components have been uninstalled.
 @REM pause

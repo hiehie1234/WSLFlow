@@ -1,16 +1,14 @@
 #!/bin/bash
 
-# 检查是否安装了 miniconda
+# Check if Miniconda is installed
 if [ -d "$HOME/miniconda3" ]; then
-    # 提示用户确认是否卸载
-    read -p "你确定要卸载 Miniconda 吗？(y/n): " CONFIRM
+    # Prompt the user to confirm uninstallation
+    read -p "Are you sure you want to uninstall Miniconda? (y/n): " CONFIRM
     if [ "$CONFIRM" == "y" ]; then
-        # 卸载 miniconda
-        rm -rf "$HOME/miniconda3"
-        echo "Miniconda 已成功卸载。"
-    else
-        echo "操作已取消。"
+        # Uninstall Miniconda
+        sudo rm -rf "$HOME/miniconda3"
+        echo "Miniconda removed successfully."
     fi
 else
-    echo "Miniconda 未安装。"
+    echo "Miniconda is not installed."
 fi

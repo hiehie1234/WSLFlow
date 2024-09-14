@@ -91,4 +91,5 @@ if %errorlevel% neq 0 (
 )
 
 echo WSL2 installation and configuration complete.
+:end
 @REM pause

@@ -1,6 +1,6 @@
 @echo off
 setlocal
-
+echo set default distribution to Ubuntu
 :: 将分布版设置为默认值
 wsl --set-default Ubuntu
 if %errorlevel% neq 0 (
@@ -12,17 +12,32 @@ set "ENV_NAME=FlexTuner"
 :: 获取 WSL 用户名
 for /f "tokens=* USEBACKQ" %%F in (`wsl whoami`) do set "wsl_username=%%F"
 for /f "tokens=*" %%i in ('wsl echo $HOME') do set "home=%%i"
+
+cd /d %~dp0
+echo "current distribution is " %~dp0
 :: 定义源目录和目标目录
 set "source=..\linux"
 set "destination=\\wsl$\Ubuntu%home%\%ENV_NAME%"
 
 :: 创建目标目录
 wsl mkdir -p "%home%/%ENV_NAME%"
-
 :: 复制文件到 WSL 用户目录
 xcopy "%source%" "%destination%" /s /e /y
 if %errorlevel% neq 0 (
     echo File copy failed.
+    pause
+    exit /b %errorlevel%
+)
+
+set "sourceLLM=..\scripts\llama-factory"
+set "destinationLLM=\\wsl$\Ubuntu%home%\%ENV_NAME%/src"
+
+wsl mkdir -p "%home%/%ENV_NAME%/src"
+xcopy "%sourceLLM%" "%destinationLLM%" /s /e /y
+
+if %errorlevel% neq 0 (
+    echo File copy failed.
+    pause
     exit /b %errorlevel%
 )
 

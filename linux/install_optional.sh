@@ -4,6 +4,7 @@
 ENV_NAME=FlexTuner
 
 # 初始化conda环境配置
+source ~/.bashrc
 eval "$(conda shell.bash hook)"
 
 # 确保退出base环境

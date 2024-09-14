@@ -1,0 +1,31 @@
+--- trainer.py.bak	2024-09-12 15:52:25.573344644 +0800
++++ trainer.py	2024-09-12 15:57:56.686042463 +0800
+@@ -2200,6 +2200,11 @@ class Trainer:
+         model.zero_grad()
+         grad_norm: Optional[float] = None
+         self.control = self.callback_handler.on_train_begin(args, self.state, self.control)
++        
++        #Richard ++++
++        timer_start = time.time()
++        args.max_seq_size = 2048
++        #Richard ----
+ 
+         if args.eval_on_start:
+             self._evaluate(trial, ignore_keys_for_eval, skip_scheduler=True)
+@@ -2275,6 +2280,16 @@ class Trainer:
+                 if step % args.gradient_accumulation_steps == 0:
+                     self.control = self.callback_handler.on_step_begin(args, self.state, self.control)
+ 
++                # Richard ++++
++                if (step+1) % args.gradient_accumulation_steps == 0:
++                    total_time = time.time()-timer_start
++                    if(total_time>0):
++                        token_sec = total_train_batch_size * args.max_seq_size / total_time
++                        logger.info(f"\n  Token sec = {token_sec:,}")
++                        #print_rank_0(f"Training efficiency: {train_batch_size*args.max_seq_len/total_time*3600} (tokens/hr)\n", dist.get_rank())
++                        timer_start = time.time()
++                # Richard ----
++
+                 with self.accelerator.accumulate(model):
+                     tr_loss_step = self.training_step(model, inputs)
+ 
