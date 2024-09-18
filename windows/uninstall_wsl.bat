@@ -19,7 +19,7 @@ wsl --set-default Ubuntu
 set "ENV_NAME=FlexTuner"
 
 :: 在 WSL 中执行脚本
-wsl bash -ic "cd /usr/share/asus-lim/env && ./uninstall.sh"
+wsl bash -ic "cd /usr/share/asus-llm/env && ./uninstall.sh"
 if %errorlevel% neq 0 (
     echo uninstall Script execution failed.
 )

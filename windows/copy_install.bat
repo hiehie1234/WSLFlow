@@ -20,7 +20,7 @@ set "destination=\\wsl$\Ubuntu\usr\share\asus-llm\env"
 
 
 :: 创建目标目录
-wsl mkdir -p "/usr/share/asus-lim/env"
+wsl mkdir -p "/usr/share/asus-llm/env"
 :: 复制文件到 WSL 用户目录
 xcopy "%source%" "%destination%" /s /e /y
 if %errorlevel% neq 0 (
@@ -52,16 +52,16 @@ del temp_sudoers
 wsl sudo apt-get update
 wsl sudo apt-get install -y dos2unix
 :: Convert all .sh files to Unix line endings
-wsl bash -c "find /usr/share/asus-lim/env -type f -name '*.sh' -exec dos2unix {} +"
+wsl bash -c "find /usr/share/asus-llm/env -type f -name '*.sh' -exec dos2unix {} +"
 
 :: 在 WSL 中为所有 .sh 文件添加执行权限
-wsl bash -c "chmod +x /usr/share/asus-lim/env/*.sh"
+wsl bash -c "chmod +x /usr/share/asus-llm/env/*.sh"
 
 :: 确保所有子目录中的 .sh 文件也有执行权限
-wsl bash -c "find /usr/share/asus-lim/env -type f -name '*.sh' -exec chmod +x {} +"
+wsl bash -c "find /usr/share/asus-llm/env -type f -name '*.sh' -exec chmod +x {} +"
 
 :: 在 WSL 中执行脚本
-wsl bash -ic "cd /usr/share/asus-lim/env && ./install.sh"
+wsl bash -ic "cd /usr/share/asus-llm/env && ./install.sh"
 if %errorlevel% neq 0 (
     echo Installing failed.
     exit /b %errorlevel%
