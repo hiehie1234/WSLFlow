@@ -19,13 +19,17 @@ wsl --set-default Ubuntu
 set "ENV_NAME=FlexTuner"
 
 :: 在 WSL 中执行脚本
-wsl bash -ic "cd $HOME/%ENV_NAME% && ./uninstall.sh"
+wsl bash -ic "cd /usr/share/asus-lim/env && ./uninstall.sh"
 if %errorlevel% neq 0 (
     echo uninstall Script execution failed.
 )
 
 :: 停止所有正在运行的 WSL 实例
 wsl --shutdown
+
+::删除 WSL 相关文件夹
+wsl rm -rf /usr/share/asus-llm
+wsl rm -rf /usr/lib/asus-llm
 
 :: 提示用户--unregister Ubuntu卸载将删除已安装的 Linux 发行版，让用户选择是否继续
 echo Uninstalling Ubuntu distribution. This will remove all installed Linux distributions.

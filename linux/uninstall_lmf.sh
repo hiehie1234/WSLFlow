@@ -5,7 +5,8 @@
 # 假设 lmf 源码安装在 /usr/local/lmf 目录下
 # 命名环境名称为ENV_NAME=FlexTuner
 ENV_NAME=FlexTuner
-LMF_DIR="$HOME/$ENV_NAME/src"
+# LMF_DIR="$HOME/$ENV_NAME/src"
+LMF_DIR="/usr/lib/asus-llm/LLaMA-Factory"
 
 # $LMF_DIR = ~/FlexTuner/src
 echo $LMF_DIR 
