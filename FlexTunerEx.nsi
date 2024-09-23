@@ -127,9 +127,10 @@ Section "Uninstall"
   RMDir "$SMPROGRAMS\${APP_NAME}"
   Delete "$DESKTOP\asus-llm.lnk"
 
-  Delete $INSTDIR\uninstall.exe
-  RMDir /r $INSTDIR\windows
-
+  Delete "$INSTDIR\uninstall.exe"
+  RMDir /r "$INSTDIR\windows"
+  RMDir /REBOOTOK "$INSTDIR\scripts\llama-factory"
+  
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${SETUPID}"
   
   Delete "$DESKTOP\${APP_NAME}.lnk"
