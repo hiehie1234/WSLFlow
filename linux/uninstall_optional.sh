@@ -3,6 +3,7 @@
 # 命名环境名称为ENV_NAME=FlexTuner
 ENV_NAME=FlexTuner
 
+source ~/.bashrc
 # 初始化conda环境配置
 eval "$(conda shell.bash hook)"
 
