@@ -16,7 +16,7 @@ echo "环境 $ENV_NAME 已成功创建并激活。"
 
 # [Mandatory]
 if ! python -c "import torch" &> /dev/null; then
-	conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia -y
+  conda install pytorch==2.2.1 torchvision==0.17.1 torchaudio==2.2.1 pytorch-cuda=12.1 -c pytorch -c nvidia -y
 	echo "torch 安装完成！"
 else
 	echo "torch 已经安装。"
@@ -41,7 +41,7 @@ fi
 
 # [optional]
 # 安装 DeepSpeed
-pip install deepspeed
+pip install deepspeed==0.14.0
 # 验证安装
 ds_report
 echo "DeepSpeed 安装完成！"

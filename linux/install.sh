@@ -80,4 +80,4 @@ fi
 ./install_optional.sh
 
 # 安装补丁
-./patch_env.sh
+# ./patch_env.sh

@@ -1,4 +1,11 @@
 #!/bin/bash
+# 检查补丁文件是否存在
+PATCH_FILE="./patch/token_sec.patch"
+if [ ! -f "$PATCH_FILE" ]; then
+  echo "Patch file $PATCH_FILE does not exist"
+  echo "Patch file path: $PATCH_FILE"
+  exit 1
+fi
 
 # 命名环境名称为ENV_NAME=FlexTuner
 ENV_NAME=FlexTuner
@@ -18,14 +25,6 @@ TRANSFORMERS_PATH=$(python -c "import transformers; print(transformers.__path__[
 
 # 输出路径（可选）
 echo "Transformers package path: $TRANSFORMERS_PATH"
-
-# 检查补丁文件是否存在
-PATCH_FILE="./patch/token_sec.patch"
-if [ ! -f "$PATCH_FILE" ]; then
-  echo "Patch file $PATCH_FILE does not exist"
-  echo "Patch file path: $PATCH_FILE"
-  exit 1
-fi
 
 # 应用补丁
 if patch -p0 -d "$TRANSFORMERS_PATH" < "$PATCH_FILE"; then
