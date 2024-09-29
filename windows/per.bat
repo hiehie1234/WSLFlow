@@ -39,45 +39,52 @@ if %errorlevel% equ 0 (
 )
 
 @REM pause
-:: 设置 WSL2 为默认版本
+@REM 设置 WSL2 为默认版本
 echo Setting WSL2 as the default version...
 wsl --set-default-version 2
 
-:: 更新 WSL
+@REM 更新 WSL
 echo Updating WSL...
 wsl --update
 
 @REM wsl --install -d Ubuntu --no-launch
-wsl --install -d Ubuntu
+@REM 获得Temp目录
+set "tempdir=%temp%"
+set "ubuntu_image=ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz"
+@REM 查找文件是否存在
+if not exist "%tempdir%\%ubuntu_image%" (
+    echo Ubuntu Jammy WSL image not found.
+    pause
+    exit /b
+)
+set "appdata_dir=%LocalAppData%\ASUSLLm\AIDistro"
+wsl --import ASUS-Workbench "%appdata_dir%" "%tempdir%\%ubuntu_image%"
 if %errorlevel% neq 0 (
-    echo Installing Ubuntu distribution failed.
+    echo Installing ASUS-Workbench distribution failed.
     pause
     exit /b %errorlevel%
 )
 
-:: 确保当前工作目录正确
-cd /d %~dp0
+@REM 删除镜像文件 %ubuntu_image%
+del "%tempdir%\%ubuntu_image%"
 
-:: 等待用户完成初始设置
+@REM 确保当前工作目录正确
+cd /d "%~dp0"
+
+@REM 等待用户完成初始设置
 :wait_loop
 timeout /t 5 /nobreak >nul
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0check-ubuntu.ps1"
 if %errorlevel% equ 0 (
-    echo Ubuntu-22.04 is installed
+    echo ASUS-Workbench is installed
 ) else (
-    echo Ubuntu-22.04 is not installed
+    echo ASUS-Workbench is not installed
     goto wait_loop
 )
 
-:: 设置 Ubuntu 为默认发行版
-echo Setting Ubuntu as the default distribution...
+@REM 设置 ASUS-Workbench 为默认发行版
+echo Setting ASUS-Workbench as the default distribution...
 wsl -l -v
-timeout /t 5 /nobreak >nul
-wsl --set-default Ubuntu
-if %errorlevel% neq 0 (
-    echo set-default failed.
-    exit /b %errorlevel%
-)
 
 echo WSL2 installation and configuration completed.
 pause

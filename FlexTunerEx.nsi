@@ -80,6 +80,18 @@ DetailPrint "MWSL"
 ExecWait '"$SYSDIR\dism.exe" /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart'
 ExecWait '"$SYSDIR\dism.exe" /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart'
 
+DetailPrint "Downloading Ubuntu Jammy WSL image..."
+; nsisdl::download "https://cloud-images.ubuntu.com/wsl/releases/jammy/current/ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz" "$TEMP\ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz"
+StrCpy $3 "workbench-amd64-wsl.rootfs.data"
+nsisdl::download "https://cloud-images.ubuntu.com/wsl/releases/jammy/current/ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz" "$TEMP\ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz" /name=$3
+Pop $4
+${If} $4 == "success"
+    DetailPrint "Download successful."
+${Else}
+    DetailPrint "Download failed: $4"
+    Abort
+${EndIf}
+
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnceEx\${SETUPID}" "" "$(^Name)"
 WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnceEx\${SETUPID}" "1" '||"$0" /Phase2'
 
@@ -93,6 +105,7 @@ WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${SETUPI
 WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${SETUPID}" "NoRepair" 1
 WriteUninstaller "$INSTDIR\uninstall.exe"
 
+CreateDirectory "$LOCALAPPDATA\ASUSLLm\AIDistro"
 ; Start Menu
 CreateDirectory "$SMPROGRAMS\${APP_NAME}"
 ; SetOutPath "$SMPROGRAMS\${APP_NAME}"
@@ -126,11 +139,11 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\${APP_NAME}\asus-llm.lnk"
   RMDir "$SMPROGRAMS\${APP_NAME}"
   Delete "$DESKTOP\asus-llm.lnk"
-
+  Delete "$TEMP\ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz"
   Delete "$INSTDIR\uninstall.exe"
   RMDir /r "$INSTDIR\windows"
   RMDir /REBOOTOK "$INSTDIR\scripts\llama-factory"
-  
+  RMDir /r "$LOCALAPPDATA\ASUSLLm\AIDistro"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${SETUPID}"
   
   Delete "$DESKTOP\${APP_NAME}.lnk"
