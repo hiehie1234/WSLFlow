@@ -37,7 +37,7 @@ if $HOUSE/miniconda3/bin/conda info --envs | grep -q "$ENV_NAME"; then
     echo \"$ENV_NAME activated.\"
     
     conda list python    
-    conda install pytorch==2.2.1 torchvision==0.17.1 torchaudio==2.2.1 pytorch-cuda=12.1 -c pytorch -c nvidia -y
+    conda install pytorch==2.2.1 torchvision==0.17.1 torchaudio==2.2.1 pytorch-cuda=12.1 numpy==1.26.4 -c pytorch -c nvidia -y
     if [ $? -ne 0 ]; then
         echo \"Failed to install PyTorch and related packages.\"
         exit 1
