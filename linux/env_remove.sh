@@ -1,16 +1,16 @@
 #!/bin/bash
 ISME=${SUDO_USER:-$(id -un)}
-HOUSE="`cat /etc/passwd |grep ^${SUDO_USER:-$(id -un)}: | cut -d: -f 6`"
+HOUSE=$(cat /etc/passwd | grep ^${SUDO_USER:-$(id -un)}: | cut -d: -f 6)
 HOUSE=${HOUSE:-$HOME}
 
 # 以普通用户身份检查是否安装了 Conda
-sudo -u $ISME bash -c "
-    if ! command -v $HOUSE/miniconda3/bin/conda &> /dev/null
+sudo -u $ISME bash -c '
+    if ! command -v '"$HOUSE"'/miniconda3/bin/conda &> /dev/null
     then
         echo "Conda is not installed."
         exit 1
     fi
-"
+'
 CHECK_CONDA_STATUS=$?
 
 if [ $CHECK_CONDA_STATUS -ne 0 ]; then
@@ -22,11 +22,11 @@ fi
 ENV_NAME=FlexTuner
 
 # 以普通用户身份卸载选定的环境
-sudo -u $ISME bash -c "
-    source $HOUSE/.bashrc
-    eval \"\$($HOUSE/miniconda3/bin/conda shell.bash hook)\"
-    conda env remove -n \"$ENV_NAME\"
-"
+sudo -u $ISME bash -c '
+    source '"$HOUSE"'/.bashrc
+    eval "$('"$HOUSE"'/miniconda3/bin/conda shell.bash hook)"
+    conda env remove -n "'"$ENV_NAME"'"
+'
 REMOVE_ENV_STATUS=$?
 
 # 检查卸载是否成功
