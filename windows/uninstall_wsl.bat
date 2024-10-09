@@ -29,13 +29,13 @@ wsl -d ASUS-Workbench -- rm -rf /usr/lib/asus-llm
 
 :: 提示用户--unregister Ubuntu卸载将删除已安装的 Linux 发行版，让用户选择是否继续
 echo Uninstalling ASUS-Workbench distribution. This will remove all installed Linux distributions.
-echo Are you sure you want to continue? (Y/N)
-choice /M "Press Y to continue or N to cancel."
+@REM echo Are you sure you want to continue? (Y/N)
+@REM choice /M "Press Y to continue or N to cancel."
 
-if errorlevel 2 (
-    echo Uninstallation cancelled.
-    exit /B
-)
+@REM if errorlevel 2 (
+@REM     echo Uninstallation cancelled.
+@REM     exit /B 1
+@REM )
 
 :: 继续卸载过程
 echo Proceeding with uninstallation...
@@ -54,4 +54,5 @@ wsl --unregister ASUS-Workbench
 @REM dism.exe /online /disable-feature /featurename:VirtualMachinePlatform
 
 echo WSL2 and all related components have been uninstalled.
+exit /b 0
 @REM pause

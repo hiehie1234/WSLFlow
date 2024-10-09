@@ -14,7 +14,7 @@ source $HOUSE/.bashrc
 eval "$($HOUSE/miniconda3/bin/conda shell.bash hook)"
 
 # 调试信息：尝试查找 conda
-echo "调试信息：尝试查找 conda"
+echo "Debugging information: Try to find [conda]"
 command -v conda
 
 # 检查是否已经安装了 conda
@@ -24,7 +24,7 @@ else
     echo "Conda not installed, start to install conda."
     # 安装conda工具,调用conda_quick_install.sh脚本
     if ! "$current_dir/conda_quick_install.sh"; then
-        echo "Conda 安装脚本执行失败。"
+        echo "Conda installation script execution failed."
         exit 1
     fi
     
@@ -47,19 +47,19 @@ fi
 $current_dir/env_init.sh
 # 检查退出状态码
 if [ $? -ne 0 ]; then
-  echo "env_init.sh execution failed"
+  echo "env_init.sh execution failed."
   exit 1
 else
-  echo "env_init.sh executed successfully"
+  echo "env_init.sh executed successfully."
 fi
 # 检查环境是否存在
 if conda info --envs | grep -q "$ENV_NAME"; then
     # 激活conda环境
     conda activate $ENV_NAME
-    echo "环境 $ENV_NAME 已成功激活。"
+    echo "$ENV_NAME activated successfully."
 else
-    echo "环境 $ENV_NAME 不存在，无法激活。"
-    echo "尝试重新创建环境..."
+    echo "$ENV_NAME does not exist."
+    echo "Try to recreate the environment..."
     $current_dir/env_init.sh
 fi
 
@@ -69,9 +69,9 @@ fi
 # 前置条件需要先安装CUDA和CUDNN
 # 判断是否有安装cuda
 if [ -d "/usr/local/cuda" ]; then
-    echo "CUDA 已经安装。"
+    echo "CUDA is already installed."
 else
-    echo "CUDA 未安装，开始安装 CUDA。"
+    echo "CUDA is not installed, starting CUDA installation."
     # 安装cuda工具,调用install_cuda.sh脚本
     ./install_cuda.sh
 fi

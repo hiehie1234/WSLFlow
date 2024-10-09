@@ -5,7 +5,8 @@ HOUSE=${HOUSE:-$HOME}
 # Check if Miniconda is installed
 if [ -d "$HOUSE/miniconda3" ]; then
     # Prompt the user to confirm uninstallation
-    read -p "Are you sure you want to uninstall Miniconda? (y/n): " CONFIRM
+    # read -p "Are you sure you want to uninstall Miniconda? (y/n): " CONFIRM="y"
+    CONFIRM="y"
     if [ "$CONFIRM" == "y" ]; then
         # Uninstall Miniconda
         sudo rm -rf "$HOUSE/miniconda3"

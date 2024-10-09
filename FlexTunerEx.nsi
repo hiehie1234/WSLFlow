@@ -77,13 +77,11 @@ ${Else}
 ${EndIf}
 
 DetailPrint "MWSL"
-ExecWait '"$SYSDIR\dism.exe" /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart'
-ExecWait '"$SYSDIR\dism.exe" /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart'
+nsExec::ExecToLog '"$SYSDIR\dism.exe" /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart'
+nsExec::ExecToLog '"$SYSDIR\dism.exe" /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart'
 
 DetailPrint "Downloading Ubuntu Jammy WSL image..."
-; nsisdl::download "https://cloud-images.ubuntu.com/wsl/releases/jammy/current/ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz" "$TEMP\ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz"
-StrCpy $3 "workbench-amd64-wsl.rootfs.data"
-nsisdl::download "https://cloud-images.ubuntu.com/wsl/releases/jammy/current/ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz" "$TEMP\ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz" /name=$3
+nsisdl::download "https://cloud-images.ubuntu.com/wsl/releases/jammy/current/ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz" "$TEMP\ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz"
 Pop $4
 ${If} $4 == "success"
     DetailPrint "Download successful."
@@ -125,15 +123,25 @@ Sleep 2000
 nsExec::ExecToLog '"$INSTDIR\wsl.exe" --update'
 Sleep 2000
 DetailPrint "P2.1 wsl"
-ExecWait '$INSTDIR\windows\per.bat'
+; ExecWait '$INSTDIR\windows\per.bat'
+nsExec::ExecToLog /OEM '$INSTDIR\windows\per.bat'
+Pop $4
+StrCmp $4 0 +3
+DetailPrint "       Return value: $4"
+Abort "Exec per.bat failed."
+
 DetailPrint "wsl installed"
 Sleep 2000
-DetailPrint "copying install"
-ExecWait '"$INSTDIR\windows\copy_install.bat"'
+DetailPrint "Setup and install"
+nsExec::ExecToLog /OEM '"$INSTDIR\windows\copy_install.bat"'
+Pop $4
+StrCmp $4 0 +3
+DetailPrint "       Return value: $4"
+Abort "Exec copy_install.bat failed."
 SectionEnd
  
 Section "Uninstall"
-  ExecWait '"$INSTDIR\windows\uninstall_wsl.bat"'
+  nsExec::ExecToLog /OEM '"$INSTDIR\windows\uninstall_wsl.bat"'
   DetailPrint "WSL uninstalled"
 
   Delete "$SMPROGRAMS\${APP_NAME}\asus-llm.lnk"

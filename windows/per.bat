@@ -5,7 +5,7 @@ net session >nul 2>&1
 if %errorLevel% neq 0 (
     echo Failure: Current permissions inadequate.
     pause
-    exit /b
+    exit /b %errorLevel% 
 )
 
 echo Starting WSL2 installation...
@@ -42,11 +42,11 @@ if %errorlevel% equ 0 (
 @REM 设置 WSL2 为默认版本
 echo Setting WSL2 as the default version...
 wsl --set-default-version 2
-
+echo .
 @REM 更新 WSL
 echo Updating WSL...
 wsl --update
-
+echo .
 @REM wsl --install -d Ubuntu --no-launch
 @REM 获得Temp目录
 set "tempdir=%temp%"
@@ -55,10 +55,11 @@ set "ubuntu_image=ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz"
 if not exist "%tempdir%\%ubuntu_image%" (
     echo Ubuntu Jammy WSL image not found.
     pause
-    exit /b
+    exit /b 1
 )
 set "appdata_dir=%LocalAppData%\ASUSLLm\AIDistro"
 wsl --import ASUS-Workbench "%appdata_dir%" "%tempdir%\%ubuntu_image%"
+echo .
 if %errorlevel% neq 0 (
     echo Installing ASUS-Workbench distribution failed.
     pause
@@ -85,6 +86,7 @@ if %errorlevel% equ 0 (
 @REM 设置 ASUS-Workbench 为默认发行版
 echo Setting ASUS-Workbench as the default distribution...
 wsl -l -v
-
+echo .
 echo WSL2 installation and configuration completed.
-pause
+exit /b 0
+@REM pause

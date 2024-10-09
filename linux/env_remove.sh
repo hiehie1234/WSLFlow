@@ -25,7 +25,7 @@ ENV_NAME=FlexTuner
 sudo -u $ISME bash -c '
     source '"$HOUSE"'/.bashrc
     eval "$('"$HOUSE"'/miniconda3/bin/conda shell.bash hook)"
-    conda env remove -n "'"$ENV_NAME"'"
+    conda env remove -n "'"$ENV_NAME"'" -y
 '
 REMOVE_ENV_STATUS=$?
 
