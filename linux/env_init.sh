@@ -25,6 +25,7 @@ fi
 # 激活conda环境
 # 检查环境是否存在
 if $HOUSE/miniconda3/bin/conda info --envs | grep -q "$ENV_NAME"; then
+  echo "installing torch ..."
   sudo -u $ISME bash -c "
     source $HOUSE/.bashrc
     eval \"\$($HOUSE/miniconda3/bin/conda shell.bash hook)\"

@@ -1,10 +1,5 @@
 #!/bin/bash
 echo "Run kill_process.sh"
-pwd
-
-HOUSE="`cat /etc/passwd |grep ^${SUDO_USER:-$(id -un)}: | cut -d: -f 6`"
-HOUSE=${HOUSE:-$HOME}
-
 cd /usr/share/asus-llm/env
 pwd
 
@@ -20,13 +15,13 @@ if [ -f pidfile ]; then
     kill $PID
     rm pidfile
     echo "Process $PID killed."
-elif [ -f $HOUSE/pidfile ]; then
-    PID=$(cat $HOUSE/pidfile)
+elif [ -f /tmp/pidfile ]; then
+    PID=$(cat /tmp/pidfile)
     echo "kPID: $PID"
     kill $PID
     sleep 5
     kill $PID
-    rm $HOUSE/pidfile
+    rm /tmp/pidfile
     echo "Process $PID killed."
 else
     echo "pidfile not found."
