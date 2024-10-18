@@ -1,3 +1,4 @@
+﻿
 RequestExecutionLevel Admin
 !define APP_NAME FlexTuner
 Name "${APP_NAME}"
@@ -26,9 +27,12 @@ FunctionEnd
 Function SkipPageInPhase2
 ${IfThen} $Phase >= 2 ${|} Abort ${|}
 FunctionEnd
- 
+!define MUI_ICON "icons\icon.ico"
 !define MUI_PAGE_CUSTOMFUNCTION_PRE SkipPageInPhase2
+!define MUI_WELCOMEFINISHPAGE_BITMAP "icons\asus-logo-photo-by-llexandro-19.bmp"
+; !define MUI_WELCOMEFINISHPAGE_BITMAP_NOSTRETCH
 !insertmacro MUI_PAGE_WELCOME
+; !insertmacro MUI_PAGE_LICENSE "LICENSE.electron.txt"
 !define MUI_PAGE_CUSTOMFUNCTION_PRE SkipPageInPhase2
 !insertmacro MUI_PAGE_COMPONENTS
 !define MUI_PAGE_CUSTOMFUNCTION_PRE SkipPageInPhase2
@@ -37,15 +41,32 @@ FunctionEnd
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_LANGUAGE "English"
- 
+LangString DESC_Section1 ${LANG_ENGLISH} "This is required to install pre-installed components"
+LangString DESC_Section2 ${LANG_ENGLISH} "This is an optional component for installation"
+LangString DESC_Section3 ${LANG_ENGLISH} "This is a required component for installation"
  
 Section "Phase1: Required" SID_P11
 SectionIn RO
 DetailPrint P1.1
-SetOutPath "$INSTDIR\linux"
-File /r "linux\*.*"
 SetOutPath "$INSTDIR\windows"
 File "windows\*.*"
+; P1.1 check ASUS-Workbench Conflict
+nsExec::ExecToLog /OEM '$INSTDIR\windows\check_conflict.bat'
+Pop $4
+StrCmp $4 409 0 +10 ;If it is not 409
+DetailPrint "Return value: $4"
+MessageBox MB_OKCANCEL "ASUS-Workbench Distro is already installed, please uninstall it before proceeding with the installation." IDOK +2
+  Quit
+; read
+ReadRegStr $4 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${SETUPID}" "InstallLocation"
+  DetailPrint "uninstall local: $4"
+  StrCmp $4 "" +3 0 ; quit if not found
+  IfFileExists "$4\uninstall.exe" 0 +2
+  ExecWait '"$4\uninstall.exe"'
+Quit
+; If it is not 409, continue the installation
+SetOutPath "$INSTDIR\linux"
+File /r "linux\*.*"
 SetOutPath "$INSTDIR\scripts\llama-factory"
 File /r "llama-factory\*.*"
 SetOutPath "$INSTDIR"
@@ -123,6 +144,13 @@ Sleep 2000
 nsExec::ExecToLog '"$INSTDIR\wsl.exe" --update'
 Sleep 2000
 DetailPrint "P2.1 wsl"
+; P2.1-P1.1 double-check ASUS-Workbench Conflict
+nsExec::ExecToLog /OEM '$INSTDIR\windows\check_conflict.bat'
+Pop $4
+StrCmp $4 409 0 +4
+DetailPrint "Return value: $4"
+MessageBox MB_OK "ASUS-Workbench Distro is already installed, please uninstall it before proceeding with the installation."
+Quit
 ; ExecWait '$INSTDIR\windows\per.bat'
 nsExec::ExecToLog /OEM '$INSTDIR\windows\per.bat'
 Pop $4
@@ -139,7 +167,7 @@ StrCmp $4 0 +3
 DetailPrint "       Return value: $4"
 Abort "Exec copy_install.bat failed."
 SectionEnd
- 
+
 Section "Uninstall"
   nsExec::ExecToLog /OEM '"$INSTDIR\windows\uninstall_wsl.bat"'
   DetailPrint "WSL uninstalled"
@@ -159,7 +187,7 @@ Section "Uninstall"
   RMDir "$SMPROGRAMS\${APP_NAME}"
   RMDir /r "$INSTDIR"
 SectionEnd
- 
+
 Function ConfigurePhaseSections
 ${If} $Phase >= 2
 	StrCpy $1 ${SID_P11} ; Disable first
@@ -176,3 +204,8 @@ loop:
 	${EndIf}
 FunctionEnd
 
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+!insertmacro MUI_DESCRIPTION_TEXT ${SID_P11} $(DESC_Section1)
+!insertmacro MUI_DESCRIPTION_TEXT ${SID_P12} $(DESC_Section2)
+!insertmacro MUI_DESCRIPTION_TEXT ${SID_P21} $(DESC_Section3)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
